@@ -1,3 +1,4 @@
 module.exports = {
-    EventMiddlewares: require('./event-middlewares')
+    EventMiddlewares: require('./event-middlewares'),
+    CategoryMiddlewares: require('./category-middlewares')
 }
