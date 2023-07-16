@@ -1,0 +1,4 @@
+node_modules/
+.env
+event_search_service/src/config/config.json
+combined.log
