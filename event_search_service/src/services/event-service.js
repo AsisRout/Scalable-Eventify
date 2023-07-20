@@ -25,9 +25,10 @@ async function createEvent(data){
 
 async function getEvents(){
     try {
-        const events = await eventRepository.getAll();
+        const events = await eventRepository.getAllEvents();
         return events;
     } catch (error){
+        console.log(error);
         throw new AppError('Cannot fetch data of all events', StatusCodes.INTERNAL_SERVER_ERROR);
     }
 };
@@ -44,8 +45,21 @@ async function getEvent(id){
     }
 };
 
+async function deleteEvent(id) {
+    try {
+        const response = await eventRepository.destroy(id);
+        return response;
+    } catch(error) {
+        if(error.statusCode == StatusCodes.NOT_FOUND) {
+            throw new AppError('The event you requested to delete is not present', error.statusCode);
+        }
+        throw new AppError('Cannot delete the event', StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+}
+
 module.exports = {
     createEvent,
     getEvent,
-    getEvents
+    getEvents,
+    deleteEvent
 };

@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsTo(models.Category,{
+        foreignKey: 'categoryId'
+      });
+      this.hasMany(models.Show);
     }
   }
   Event.init({
@@ -22,10 +26,13 @@ module.exports = (sequelize, DataTypes) => {
     description: {
       type: DataTypes.STRING
     },
-    interested_count: {
+    interestedCount: {
       type: DataTypes.INTEGER,
       defaultValue: 0
     },
+    categoryId: {
+      type: DataTypes.INTEGER,
+    }
   }, {
     sequelize,
     modelName: 'Event',

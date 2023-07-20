@@ -17,7 +17,7 @@ module.exports = {
       description: {
         type: Sequelize.STRING
       },
-      interested_count: {
+      interestedCount: {
         type: Sequelize.INTEGER,
         defaultValue: 0
       },

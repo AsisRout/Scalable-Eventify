@@ -5,6 +5,8 @@ const AppError = require('../utils/errors/app-error');
 
 const categoryRepository = new CategoryRepository();
 
+
+
 async function createCategory(data){
     try{
         const response = await categoryRepository.create(data);
@@ -28,6 +30,7 @@ async function getCategories(){
         const categories = await categoryRepository.getAll();
         return categories;
     } catch (error){
+        console.log(error);
         throw new AppError('Cannot fetch data of all categories', StatusCodes.INTERNAL_SERVER_ERROR);
     }
 };
@@ -43,6 +46,8 @@ async function getCategory(id){
         throw new AppError('Cannot fetch data of the event', StatusCodes.INTERNAL_SERVER_ERROR);
     }
 };
+
+
 
 module.exports = {
     createCategory,

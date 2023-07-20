@@ -8,7 +8,8 @@ async function createEvent(req, res) {
         const event = await EventService.createEvent({
             name: req.body.name,
             description: req.body.description,
-            interested_count: req.body.interested_count
+            interestedCount: req.body.interestedCount,
+            categoryId: req.body.categoryId
         });
         SuccessResponse.data = event;
         return res

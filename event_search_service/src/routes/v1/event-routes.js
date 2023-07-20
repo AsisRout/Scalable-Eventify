@@ -1,5 +1,5 @@
 const express = require('express');
-const { EventMiddlewares } = require('../../middlewares');
+const { EventMiddlewares} = require('../../middlewares');
 const { EventController } = require('../../controllers');
 
 const router = express.Router();

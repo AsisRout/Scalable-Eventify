@@ -5,11 +5,11 @@ const { SuccessResponse, ErrorResponse } = require('../utils/commons');
 
 async function createCategory(req, res) {
     try {
-        const event = await CategoryService.createCategory({
+        const category = await CategoryService.createCategory({
             name: req.body.name,
             description: req.body.description,
         });
-        SuccessResponse.data = event;
+        SuccessResponse.data = category;
         return res
                 .status(StatusCodes.CREATED)
                 .json(SuccessResponse);
