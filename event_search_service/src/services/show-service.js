@@ -1,4 +1,4 @@
-const { ShowRepository } = require('../repositories');
+const { ShowRepository, EventRepository } = require('../repositories');
 const { StatusCodes } = require('http-status-codes');
 const AppError = require('../utils/errors/app-error');
 
@@ -23,13 +23,42 @@ async function createShow(data){
     }
 };
 
-async function getShows(){
+async function getShows(query){
+    let customFilter = {};
+    let sortFilter = [];
+    const endingShowTime = " 23:59:00";
+    // CITY=Delhi
+    if(query.city) {
+       customFilter.cityId =  query.city;
+    }
+    if(query.price) {
+        [minPrice, maxPrice] = query.price.split("-");
+        customFilter.price = {
+            [Op.between]: [minPrice, ((maxPrice == undefined) ? 20000: maxPrice)]
+        }
+    }
+    if(query.tickets) {
+        customFilter.totalSeats = {
+            [Op.gte]: query.tickets
+        }
+    }
+    if(query.showDate) {
+        customFilter.startTime = {
+            [Op.between]: [query.showDate, query.showDate + endingShowTime]
+        }
+    }
+    if(query.sort) {
+        const params = query.sort.split(',');
+        const sortFilters = params.map((param) => param.split('_'));
+        sortFilter = sortFilters
+    }
+
     try {
-        const shows = await showRepository.getAll();
+        const show = await showRepository.getAllShows(customFilter, sortFilter);
         return shows;
-    } catch (error){
+    } catch(error) {
         console.log(error);
-        throw new AppError('Cannot fetch data of all shows', StatusCodes.INTERNAL_SERVER_ERROR);
+        throw new AppError('Cannot fetch data of all the shows', StatusCodes.INTERNAL_SERVER_ERROR);
     }
 };
 
@@ -57,9 +86,21 @@ async function deleteShow(id) {
     }
 }
 
+async function updateSeats(data) {
+    try {
+        const response = await EventRepository.updateRemainingSeats(data.showId, data.seats, data.dec);
+        return response;
+    } catch(error) {
+        console.log(error);
+        throw new AppError('Cannot update data of the show', StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+}
+
+
 module.exports = {
     createShow,
     getShow,
     getShows,
-    deleteShow
+    deleteShow,
+    updateSeats
 };
