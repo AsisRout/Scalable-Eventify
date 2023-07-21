@@ -1,14 +1,28 @@
 const { StatusCodes } = require('http-status-codes');
+const { BookingService } = require('../services');
+const { SuccessResponse, ErrorResponse } = require('../utils/common');
 
-const info = (req, res) => {
-    return res.status(StatusCodes.OK).json({
-        success: true,
-        message: 'API is live',
-        error: {},
-        data: {}
-    });
+async function createBooking(req, res) {
+    try {
+        console.log("body",req.body);
+        const response = await BookingService.createBooking({
+            showId: req.body.showId,
+            userId: req.body.userId,
+            noofSeats: req.body.noofSeats
+        });
+        SuccessResponse.data = response;
+        return res
+                .status(StatusCodes.OK)
+                .json(SuccessResponse);
+    } catch(error) {
+        console.log("controller catching")
+        ErrorResponse.error = error;
+        return res
+                .status(StatusCodes.INTERNAL_SERVER_ERROR)
+                .json(ErrorResponse);
+    }
 }
 
 module.exports = {
-    info
+    createBooking
 }
