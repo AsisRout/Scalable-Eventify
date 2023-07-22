@@ -11,7 +11,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      eventId: {
+      showId: {
         type: Sequelize.INTEGER,
         allowNull:false
       },

@@ -11,6 +11,7 @@ async function createShow(data){
         return response;
     }
     catch(error){
+        console.log(error);
         if(error.name == 'SequelizeValidationError') {
             let explanations = [];
             error.errors.forEach((err) => {
@@ -54,7 +55,7 @@ async function getShows(query){
     }
 
     try {
-        const show = await showRepository.getAllShows(customFilter, sortFilter);
+        const shows = await showRepository.getAllShows(customFilter, sortFilter);
         return shows;
     } catch(error) {
         console.log(error);
@@ -86,9 +87,21 @@ async function deleteShow(id) {
     }
 }
 
+async function updateShow(id) {
+    try {
+        const response = await showRepository.update(id);
+        return response;
+    } catch(error) {
+        if(error.statusCode == StatusCodes.NOT_FOUND) {
+            throw new AppError('The show you requested to delete is not present', error.statusCode);
+        }
+        throw new AppError('Cannot delete the show', StatusCodes.INTERNAL_SERVER_ERROR);
+    }
+}
+
 async function updateSeats(data) {
     try {
-        const response = await EventRepository.updateRemainingSeats(data.showId, data.seats, data.dec);
+        const response = await showRepository.updateRemainingSeats(data.showId, data.seats, data.dec);
         return response;
     } catch(error) {
         console.log(error);
@@ -102,5 +115,6 @@ module.exports = {
     getShow,
     getShows,
     deleteShow,
-    updateSeats
+    updateSeats,
+    updateShow
 };

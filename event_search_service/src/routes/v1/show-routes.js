@@ -10,5 +10,10 @@ router.get('/', ShowController.getShows);
 
 router.get('/:id', ShowController.getShow);
 
+router.patch(
+    '/:id/seats', 
+    ShowMiddlewares.validateUpdateSeatsRequest,
+    ShowController.updateSeats
+);
 module.exports = router;
 

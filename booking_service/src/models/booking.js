@@ -3,8 +3,9 @@ const {
   Model
 } = require('sequelize');
 
-const {Enums} = require('../utils/common');
+const {Enums} = require('../utils/commons');
 const { BOOKED, CANCELLED, INITIATED, PENDING } = Enums.BOOKING_STATUS;
+
 
 module.exports = (sequelize, DataTypes) => {
   class Booking extends Model {
@@ -18,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Booking.init({
-    eventId: {
+    showId: {
       type: DataTypes.INTEGER,
       allowNull: false
     },

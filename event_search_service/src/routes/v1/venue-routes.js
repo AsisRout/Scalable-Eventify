@@ -1,5 +1,5 @@
 const express = require('express');
-const { S } = require('../../middlewares');
+const { VenueMiddlewares } = require('../../middlewares');
 const { VenueController } = require('../../controllers');
 
 const router = express.Router();

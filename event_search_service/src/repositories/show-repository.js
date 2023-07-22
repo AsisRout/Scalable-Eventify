@@ -1,6 +1,5 @@
 const CrudRepository = require('./crud-repository');
-const { Show } = require('../models');
-const { addRowLockOnShow } = require('./queries');
+const { Show, Venue, Event, City } = require('../models');
 
 class ShowRepository extends CrudRepository {
     constructor() {
@@ -15,12 +14,10 @@ class ShowRepository extends CrudRepository {
                 {
                     model: Event,
                     required: true,
-                    as: 'eventDetail',
                 },
                 {
                     model: Venue,
                     required: true,
-                    as: 'venueDetails',
                     include: {
                         model: City,
                         required: true
@@ -29,6 +26,21 @@ class ShowRepository extends CrudRepository {
             ]
         });
         return response;
+    }
+
+    async updateRemainingSeats(showId, seats, dec = true) {
+        try {
+            const show = await this.model.findByPk(showId);
+            if(+dec) {
+                await show.decrement('totalSeats', {by: seats});
+            } else {
+                await show.increment('totalSeats', {by: seats});
+            }
+            return show;
+        } catch(error) {
+            throw error;
+        }
+       
     }
 }
 
